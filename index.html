@@ -201,6 +201,52 @@
 <script src="js/reveal.min.js"></script>
 
 <script>
+    // Canvas initialization handler
+    // Class for "pretty-printing" the canvas
+    var canvasInitializationHandler = (function() {
+
+        var topInLingerState, topInOpenState;
+
+        var leaveActiveStateTimeoutHandle = -1;
+
+        function onButtonMenuMouseOver() {
+            var buttonMenuQueryElement = $(this);
+            if (leaveActiveStateTimeoutHandle != -1) {
+                clearTimeout(leaveActiveStateTimeoutHandle);
+            }
+
+            buttonMenuQueryElement.animate({ 'top': topInOpenState }, 500);
+        }
+
+        function onButtonMenuMouseOut() {
+            var buttonMenuQueryElement = $(this);
+
+            leaveActiveStateTimeoutHandle = setTimeout(function() {
+                buttonMenuQueryElement.animate({ 'top': topInLingerState }, 500);
+                leaveActiveStateTimeoutHandle = -1;
+            }, 2000);
+        }
+
+        function initializeButtonMenuElementAnimation(eventArgs) {
+            var buttonMenuQueryElement = $(eventArgs.buttonMenuElement);
+            buttonMenuQueryElement.mouseover(onButtonMenuMouseOver);
+            buttonMenuQueryElement.mouseout(onButtonMenuMouseOut);
+
+            var height = buttonMenuQueryElement.height();
+            topInOpenState = parseInt(buttonMenuQueryElement.css('top')) - 1;
+            topInLingerState = topInOpenState - height + 4;
+
+            buttonMenuQueryElement.css('top', topInLingerState);
+        }
+
+        function onCanvasPluginInitialized(eventArgs) {
+            initializeButtonMenuElementAnimation(eventArgs);
+
+        }
+
+        return onCanvasPluginInitialized;
+    })();
+
     // Full list of configuration options available here:
     // https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
