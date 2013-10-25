@@ -2,6 +2,8 @@
 
 The plugin provides a canvas for drawing to reveal.js presentations.
 
+[View the demo!](http://theone1984.github.io/reveal-canvas)
+
 ## Documentation
 
 The plugin is documented using its slideshow as a documentation.
